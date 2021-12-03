@@ -27,5 +27,6 @@ static (int, int) GetResultsForDay(int day) => day switch
 {
     1 => new Day1("Data/Day1.txt").GetDay1Result(),
     2 => new Day2("Data/Day2.txt").GetDay2Result(),
+    3 => new Day3("Data/Day3.txt").GetDay3Result(),
     _ => throw new ArgumentOutOfRangeException($"Day {day} is either out of scope or not yet implemented")
 };
