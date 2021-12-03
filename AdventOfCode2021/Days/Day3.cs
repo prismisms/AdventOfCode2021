@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using System.Text;
 
 namespace AdventOfCode2021
 {
@@ -26,20 +25,8 @@ namespace AdventOfCode2021
 
             for (var column = 0; column < 12; column++)
             {
-                var ones = 0;
-                var zeroes = 1;
-
-                for (var i = 0; i < numberOfRows; i++)
-                {
-                    if (contents[i][column] == '0')
-                    {
-                        zeroes++;
-                    }
-                    else
-                    {
-                        ones++;
-                    }
-                }
+                var ones = contents.Count(x => x[column] == '1');
+                var zeroes = contents.Count() - ones;
 
                 if (zeroes > ones)
                 {
@@ -77,20 +64,13 @@ namespace AdventOfCode2021
             {
                 if (contents.Count() > 1) 
                 {
-                    var (mostCommon, leastCommon) = GetMostAndLeastCommonBits(contents);
-                    var content = new List<string>();
-                    var bit = mostCommon[column];
-                    contents.ForEach(x => 
-                    {
-                        if (x[column] == bit) 
-                        {
-                            content.Add(x);
-                        }
-                    });
-                    contents = content;
+                    var (mostCommon, _) = GetMostAndLeastCommonBits(contents);
+                    contents = contents.Where(x => x[column] == mostCommon[column]).ToList();
                 }
             }
-            return Convert.ToInt32(contents.First(), 2);
+    
+            var returnVal = Convert.ToInt32(contents[0], 2);
+            return Convert.ToInt32(contents[0], 2);
         }
 
         private int GetCO2ScrubberRating() 
@@ -100,19 +80,12 @@ namespace AdventOfCode2021
             {
                 if (contents.Count() > 1) 
                 {
-                    var (mostCommon, leastCommon) = GetMostAndLeastCommonBits(contents);
-                    var content = new List<string>();
-                    var bit = leastCommon[column];
-                    contents.ForEach(x => 
-                    {
-                        if (x[column] == bit) 
-                        {
-                            content.Add(x);
-                        }
-                    });
-                    contents = content;
+                    var (_, leastCommon) = GetMostAndLeastCommonBits(contents);
+                    contents = contents.Where(x => x[column] == leastCommon[column]).ToList();
                 }
             }
+
+            var returnVal = Convert.ToInt32(contents.First(), 2);
             return Convert.ToInt32(contents.First(), 2);
         }
     }
