@@ -17,12 +17,12 @@ namespace AdventOfCode2021
             return (GetPowerConsumption(), GetPart2Value());
         }
 
-        public int GetPowerConsumption()
+        public (string, string) GetMostAndLeastCommonBits(List<string> contents)
         {
             var mostCommon = new StringBuilder();
             var leastCommon = new StringBuilder();
 
-            var numberOfRows = _fileContents.Count();
+            var numberOfRows = contents.Count();
 
             for (var column = 0; column < 12; column++)
             {
@@ -31,7 +31,7 @@ namespace AdventOfCode2021
 
                 for (var i = 0; i < numberOfRows; i++)
                 {
-                    if (_fileContents[i][column] == '0')
+                    if (contents[i][column] == '0')
                     {
                         zeroes++;
                     }
@@ -48,122 +48,72 @@ namespace AdventOfCode2021
                 }
                 else
                 {
-                    leastCommon.Append("0");
                     mostCommon.Append("1");
+                    leastCommon.Append("0");
                 }
-
             }
 
-            var gammaRate = Convert.ToInt32(mostCommon.ToString(), 2);
-            var epsilonRate = Convert.ToInt32(leastCommon.ToString(), 2);
+            return (mostCommon.ToString(), leastCommon.ToString());
+        }
+
+        public int GetPowerConsumption() 
+        {
+            var (mostCommon, leastCommon) = GetMostAndLeastCommonBits(_fileContents);
+            var gammaRate = Convert.ToInt32(mostCommon, 2);
+            var epsilonRate = Convert.ToInt32(leastCommon, 2);
 
             return gammaRate*epsilonRate;
         }
 
         public int GetPart2Value()
         {
-            return GetOxygenGeneratorRating() * GetCO2ScrubberRating();
+            return GetOxygenRating()*GetCO2ScrubberRating();
         }
 
-        public int GetOxygenGeneratorRating()
+        private int GetOxygenRating() 
         {
-            var numberOfRows = _fileContents.Count();
-            var oxygenRating = _fileContents;
-
+            var contents = _fileContents;
             for (var column = 0; column < 12; column++)
             {
-                var ones = 0;
-                var zeroes = 1;
-
-                if (oxygenRating.Count() > 1)
+                if (contents.Count() > 1) 
                 {
-                    for (var i = 0; i < numberOfRows; i++)
+                    var (mostCommon, leastCommon) = GetMostAndLeastCommonBits(contents);
+                    var content = new List<string>();
+                    var bit = mostCommon[column];
+                    contents.ForEach(x => 
                     {
-                        if (_fileContents[i][column] == '0')
+                        if (x[column] == bit) 
                         {
-                            zeroes++;
+                            content.Add(x);
                         }
-                        else
-                        {
-                            ones++;
-                        }
-                    }
-
-                    if (zeroes > ones)
-                    {
-
-                        oxygenRating = GetOxygenRating(column, '0', oxygenRating);
-
-                    }
-                    else if (ones > zeroes || ones == zeroes)
-                    {
-                        oxygenRating = GetOxygenRating(column, '1', oxygenRating);
-                    }
+                    });
+                    contents = content;
                 }
             }
-
-            return Convert.ToInt32(oxygenRating.First(), 2);
+            return Convert.ToInt32(contents.First(), 2);
         }
 
-        public int GetCO2ScrubberRating()
+        private int GetCO2ScrubberRating() 
         {
-            var numberOfRows = _fileContents.Count();
-            var oxygenRating = _fileContents;
-
+            var contents = _fileContents;
             for (var column = 0; column < 12; column++)
             {
-                var ones = 0;
-                var zeroes = 1;
-
-                if (oxygenRating.Count > 1)
+                if (contents.Count() > 1) 
                 {
-                    for (var i = 0; i < numberOfRows; i++)
+                    var (mostCommon, leastCommon) = GetMostAndLeastCommonBits(contents);
+                    var content = new List<string>();
+                    var bit = leastCommon[column];
+                    contents.ForEach(x => 
                     {
-                        if (_fileContents[i][column] == '0')
+                        if (x[column] == bit) 
                         {
-                            zeroes++;
+                            content.Add(x);
                         }
-                        else
-                        {
-                            ones++;
-                        }
-                    }
-
-                    if (zeroes > ones)
-                    {
-
-                        oxygenRating = GetOxygenRating(column, '1', oxygenRating);
-
-                    }
-                    else if (ones > zeroes || ones == zeroes)
-                    {
-                        oxygenRating = GetOxygenRating(column, '0', oxygenRating);
-                    }
+                    });
+                    contents = content;
                 }
             }
-
-            return Convert.ToInt32(oxygenRating.First(), 2);
+            return Convert.ToInt32(contents.First(), 2);
         }
-
-        private List<string> GetOxygenRating(int column, char firstBit, List<string> input)
-        {
-            var oxygenRating = new List<string>();
-            var numbers = input;
-            for (var j = 0; j < numbers.Count; j++)
-            {
-                if (numbers.Count > 1)
-                {
-                    var row = numbers[j];
-                    var firstActualBit = row[column];
-                    if (numbers[j][column] == firstBit) 
-                    {
-                        oxygenRating.Add(_fileContents[j]);
-                    }
-                }
-            }
-
-            return oxygenRating;
-        }
-
     }
 }

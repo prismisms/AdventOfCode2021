@@ -10,7 +10,6 @@
             _fileLocation = fileLocation;
         }
 
-
         public (int, int) GetDay1Result()
         {
             var fileContents = FileHandler.GetFileContentsAsNumbers(_fileLocation);
