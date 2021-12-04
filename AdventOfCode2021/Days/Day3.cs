@@ -2,26 +2,32 @@
 
 namespace AdventOfCode2021
 {
-    public class Day3
+    public class Day3 : DayBase<string>
     {
-        private readonly List<string> _fileContents;
-
-        public Day3(string fileLocation)
+        public Day3(string fileLocation) : base(FileHandler.GetFileContentsAsStrings(fileLocation))
         {
-            _fileContents = FileHandler.GetFileContentsAsStrings(fileLocation);
         }
 
-        public (int, int) GetDay3Result()
+        // Gets power consumption
+        public override int Part1() 
         {
-            return (GetPowerConsumption(), GetPart2Value());
+            var (mostCommon, leastCommon) = GetMostAndLeastCommonBits(FileContents);
+            var gammaRate = Convert.ToInt32(mostCommon, 2);
+            var epsilonRate = Convert.ToInt32(leastCommon, 2);
+
+            return gammaRate*epsilonRate;
+        }
+        public override int Part2()
+        {
+            return GetOxygenRating()*GetCO2ScrubberRating();
         }
 
-        private static (string, string) GetMostAndLeastCommonBits(List<string> contents)
+        private static (string, string) GetMostAndLeastCommonBits(IReadOnlyCollection<string> contents)
         {
             var mostCommon = new StringBuilder();
             var leastCommon = new StringBuilder();
 
-            for (var column = 0; column < 12; column++)
+            for (var column = 0; column < contents.First().Length; column++)
             {
                 var ones = contents.Count(x => x[column] == '1');
                 var zeroes = contents.Count - ones;
@@ -41,24 +47,10 @@ namespace AdventOfCode2021
             return (mostCommon.ToString(), leastCommon.ToString());
         }
 
-        public int GetPowerConsumption() 
-        {
-            var (mostCommon, leastCommon) = GetMostAndLeastCommonBits(_fileContents);
-            var gammaRate = Convert.ToInt32(mostCommon, 2);
-            var epsilonRate = Convert.ToInt32(leastCommon, 2);
-
-            return gammaRate*epsilonRate;
-        }
-
-        public int GetPart2Value()
-        {
-            return GetOxygenRating()*GetCO2ScrubberRating();
-        }
-
         private int GetOxygenRating() 
         {
-            var contents = _fileContents;
-            for (var column = 0; column < 12; column++)
+            var contents = FileContents;
+            for (var column = 0; column < contents.First().Length; column++)
             {
                 if (contents.Count > 1) 
                 {
@@ -67,13 +59,13 @@ namespace AdventOfCode2021
                 }
             }
     
-            return Convert.ToInt32(contents[0], 2);
+            return Convert.ToInt32(contents.First(), 2);
         }
 
         private int GetCO2ScrubberRating() 
         {
-            var contents = _fileContents;
-            for (var column = 0; column < 12; column++)
+            var contents = FileContents;
+            for (var column = 0; column < contents.First().Length; column++)
             {
                 if (contents.Count() > 1) 
                 {

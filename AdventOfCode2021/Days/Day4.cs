@@ -1,44 +1,39 @@
 namespace AdventOfCode2021
 {
-    public class Day4
+    public class Day4 : DayBase<string>
     {
-        private readonly List<string> _fileContents;
         private readonly List<string> _calledNumbers;
         private readonly List<BingoBoard> _bingoBoards;
 
-        public Day4(string fileLocation)
+        public Day4(string fileLocation) : base(FileHandler.GetFileContentsAsStrings(fileLocation))
         {
-            _fileContents = FileHandler.GetFileContentsAsStrings(fileLocation);
             _calledNumbers = GetAllCalledNumbers();
             _bingoBoards = GetBingoBoards();
         }
 
-        public (int, int) GetDay4Result() 
-        {
-            return (GetWinningBoardSum(), GetLastWinningBoardSum());
-        }
-
-        public int GetWinningBoardSum()
+        // Product of the unmarked cells in the first winning board and the number that caused that win 
+        public override int Part1()
         {
             var (winningNumber, winningBoard) = GetWinner();
-
-            var boardSum = 0;
-            winningBoard.Cells.Where(x => !x.Marked).ToList().ForEach(x => boardSum += int.Parse(x.Value));
-
-            return boardSum * winningNumber;
+            return GetSumOfUnmarkedValues(winningBoard) * winningNumber;
         }
 
-        public int GetLastWinningBoardSum()
+        // Product of the unmarked cells in the last winning board and the number that caused that win 
+        public override int Part2()
         {
             var (winningNumber, winningBoard) = GetLastWinner();
-
-            var boardSum = 0;
-            winningBoard.Cells.Where(x => !x.Marked).ToList().ForEach(x => boardSum += int.Parse(x.Value));
-
-            return boardSum * winningNumber;
+            return GetSumOfUnmarkedValues(winningBoard) * winningNumber;
         }
 
-        public (int, BingoBoard) GetWinner()
+        private static int GetSumOfUnmarkedValues(BingoBoard board)
+        {
+            return board.Cells
+                .FindAll(x => !x.Marked)
+                .Select(x => int.Parse(x.Value))
+                .Sum();
+        }
+
+        private (int, BingoBoard) GetWinner()
         {
             RefreshBingoBoards();
 
@@ -57,7 +52,7 @@ namespace AdventOfCode2021
             throw new Exception();
         }
 
-        public (int, BingoBoard) GetLastWinner()
+        private (int, BingoBoard) GetLastWinner()
         {
             RefreshBingoBoards();
 
@@ -66,7 +61,7 @@ namespace AdventOfCode2021
                 foreach (var board in _bingoBoards.Where(board => !board.HasWon))
                 {
                     board.MarkCell(number);
-                    if (board.HasWin() & _bingoBoards.Count(x => !x.HasWon) == 1)
+                    if (_bingoBoards.Count(x => !x.HasWon) == 1 && board.HasWin())
                     { 
                         return (int.Parse(number), board);
                     }
@@ -76,21 +71,21 @@ namespace AdventOfCode2021
             throw new Exception();
         }
 
-        public List<string> GetAllCalledNumbers()
+        private List<string> GetAllCalledNumbers()
         {
-            var numbers = _fileContents.First();
+            var numbers = FileContents.First();
             return numbers.Split(',').ToList();
         }
 
         public List<BingoBoard> GetBingoBoards()
         {
-            _fileContents.RemoveAt(0);
+            FileContents.RemoveAt(0);
 
             var bingoBoards = new List<BingoBoard>();
 
             var bingoBoardNumber = 0;
             var rowNumber = 0;
-            _fileContents.ForEach(x =>
+            FileContents.ForEach(x =>
             {
                 if (string.IsNullOrWhiteSpace(x))
                 {
@@ -105,7 +100,7 @@ namespace AdventOfCode2021
                 {
                     var bingoBoard = bingoBoards.First(x => x.Id == bingoBoardNumber);
                     var bingoBoardLineContents = x.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
-                    for (var i = 0; i < bingoBoardLineContents.Count(); i++)
+                    for (var i = 0; i < bingoBoardLineContents.Count; i++)
                     {
                         if (!string.IsNullOrWhiteSpace(bingoBoardLineContents[i]))
                         {

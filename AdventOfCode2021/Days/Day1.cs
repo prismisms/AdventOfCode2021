@@ -1,22 +1,25 @@
 ﻿namespace AdventOfCode2021
 {
-    public class Day1
+    public class Day1 : DayBase<int>
     {
         // How many measurements are larger than the previous measurement?
-        private readonly string _fileLocation;
-
-        public Day1(string fileLocation)
+        public Day1(string fileLocation) 
+            : base(FileHandler.GetFileContentsAsNumbers(fileLocation))
         {
-            _fileLocation = fileLocation;
         }
 
-        public (int, int) GetDay1Result()
+        public override int Part1()
         {
-            var fileContents = FileHandler.GetFileContentsAsNumbers(_fileLocation);
-            return (GetNumberOfTimesDepthHasIncreased(fileContents), GetNumberOfTimesDepthHasIncreasedInSlidingWindow(fileContents));
+            return GetNumberOfTimesDepthHasIncreased(FileContents);
         }
 
-        public static int GetNumberOfTimesDepthHasIncreased(List<int> measurements)
+        public override int Part2()
+        {
+            var windows = GetWindows(FileContents);
+            return GetNumberOfTimesDepthHasIncreased(windows);
+        }
+
+        private static int GetNumberOfTimesDepthHasIncreased(List<int> measurements)
         {
             var output = 0;
             int? lastMeasurement = null;
@@ -31,12 +34,6 @@
             });
 
             return output;
-        }
-
-        public static int GetNumberOfTimesDepthHasIncreasedInSlidingWindow(List<int> measurements)
-        {
-            var windows = GetWindows(measurements);
-            return GetNumberOfTimesDepthHasIncreased(windows);
         }
 
         private static List<int> GetWindows(IReadOnlyList<int> measurements)

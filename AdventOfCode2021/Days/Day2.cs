@@ -1,24 +1,20 @@
 ﻿namespace AdventOfCode2021
 {
-    public class Day2
+    public class Day2 : DayBase<string>
     {
-        private readonly List<(string, int)> _fileContents;
+        private readonly List<(string, int)> _formattedFileContents;
 
-        public Day2(string fileLocation)
+        public Day2(string fileLocation) : base(FileHandler.GetFileContentsAsStrings(fileLocation))
         {
-            _fileContents = ParseFile(fileLocation);
+            _formattedFileContents = SplitFile();
         }
 
-        public (int, int) GetDay2Result()
-        {
-            return (CalculateHorizontalAndVerticalDepth(), CalculateHorizontalAndVerticalDepthBasedOnAim());
-        }
-
-        private int CalculateHorizontalAndVerticalDepth()
+        // Calculates horizontal and vertical depth
+        public override int Part1()
         {
             var horizontalPosition = 0;
             var verticalPosition = 0;
-            _fileContents.ForEach(line =>
+            _formattedFileContents.ForEach(line =>
             {
                 var (direction, distance) = line;
                 switch (direction)
@@ -40,12 +36,13 @@
             return horizontalPosition * verticalPosition;
         }
 
-        private int CalculateHorizontalAndVerticalDepthBasedOnAim()
+        // Calculates horizontal and vertical depth, taking aim into account
+        public override int Part2()
         {
             var horizontalPosition = 0;
             var verticalPosition = 0;
             var aim = 0;
-            _fileContents.ForEach(line =>
+            _formattedFileContents.ForEach(line =>
             {
                 var (direction, distance) = line;
                 switch (direction)
@@ -76,11 +73,10 @@
             return horizontalPosition * verticalPosition;
         }
 
-        private static List<(string, int)> ParseFile(string fileLocation)
+        private List<(string, int)> SplitFile()
         {
             var result = new List<(string, int)>();
-            var lines = FileHandler.GetFileContentsAsStrings(fileLocation);
-            lines.ForEach(x =>
+            FileContents.ForEach(x =>
             {
                 var splitLine = x.Split(' ');
                 result.Add((splitLine[0], int.Parse(splitLine[1])));
