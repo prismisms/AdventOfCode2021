@@ -16,17 +16,15 @@ namespace AdventOfCode2021
             return (GetPowerConsumption(), GetPart2Value());
         }
 
-        public (string, string) GetMostAndLeastCommonBits(List<string> contents)
+        private static (string, string) GetMostAndLeastCommonBits(List<string> contents)
         {
             var mostCommon = new StringBuilder();
             var leastCommon = new StringBuilder();
 
-            var numberOfRows = contents.Count();
-
             for (var column = 0; column < 12; column++)
             {
                 var ones = contents.Count(x => x[column] == '1');
-                var zeroes = contents.Count() - ones;
+                var zeroes = contents.Count - ones;
 
                 if (zeroes > ones)
                 {
@@ -62,14 +60,13 @@ namespace AdventOfCode2021
             var contents = _fileContents;
             for (var column = 0; column < 12; column++)
             {
-                if (contents.Count() > 1) 
+                if (contents.Count > 1) 
                 {
                     var (mostCommon, _) = GetMostAndLeastCommonBits(contents);
                     contents = contents.Where(x => x[column] == mostCommon[column]).ToList();
                 }
             }
     
-            var returnVal = Convert.ToInt32(contents[0], 2);
             return Convert.ToInt32(contents[0], 2);
         }
 
@@ -85,7 +82,6 @@ namespace AdventOfCode2021
                 }
             }
 
-            var returnVal = Convert.ToInt32(contents.First(), 2);
             return Convert.ToInt32(contents.First(), 2);
         }
     }
