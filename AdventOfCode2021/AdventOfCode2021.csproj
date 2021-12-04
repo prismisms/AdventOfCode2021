@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\Day4.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="Data\Day1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -19,4 +22,17 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Data\Day4.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Days\Day4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Program.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
 </Project>

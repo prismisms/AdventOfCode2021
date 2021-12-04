@@ -1,0 +1,145 @@
+namespace AdventOfCode2021
+{
+    public class Day4
+    {
+        private readonly List<string> _fileContents;
+
+        public Day4(string fileLocation)
+        {
+            _fileContents = FileHandler.GetFileContentsAsStrings(fileLocation);
+        }
+
+        public (int, int) GetDay4Result() 
+        {
+            return (GetWinningBoardSum(),0);
+        }
+
+        public int GetWinningBoardSum()
+        {
+            var (winningNumber, winningBoard) = GetWinner();
+
+            var boardSum = 0;
+            winningBoard.Cells.Where(x => !x.Marked).ToList().ForEach(x => boardSum += int.Parse(x.Value));
+
+            return boardSum * winningNumber;
+
+        }
+
+        public (int, BingoBoard) GetWinner()
+        {
+            var calledNumbers = GetAllCalledNumbers();
+            var bingoBoards = GetBingoBoards();
+
+            foreach(var number in calledNumbers)
+            {
+                foreach(var board in bingoBoards)
+                {
+                    board.MarkCell(number);
+                    if (board.HasWin())
+                    {
+                        return (int.Parse(number), board);
+                    }
+                }
+            }
+
+            throw new Exception();
+        }
+
+        public List<string> GetAllCalledNumbers()
+        {
+            var numbers = _fileContents.First();
+            _fileContents.Remove(numbers);
+            return numbers.Split(',').ToList();
+        }
+
+        public List<BingoBoard> GetBingoBoards()
+        {
+            var bingoBoards = new List<BingoBoard>();
+
+            var bingoBoardNumber = 0;
+            var rowNumber = 0;
+            _fileContents.ForEach(x =>
+            {
+                if (string.IsNullOrWhiteSpace(x))
+                {
+                    bingoBoardNumber++;
+                    bingoBoards.Add(new BingoBoard
+                    {
+                        Id = bingoBoardNumber
+                    });
+                    rowNumber = 0;
+                }
+                else
+                {
+                    var bingoBoard = bingoBoards.Where(x => x.Id == bingoBoardNumber).First();
+                    var bingoBoardLineContents = x.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+                    for (var i = 0; i < bingoBoardLineContents.Count(); i++)
+                    {
+                        if (!string.IsNullOrWhiteSpace(bingoBoardLineContents[i]))
+                        {
+                            bingoBoard.Cells.Add(new BingoBoardCell
+                            {
+                                Row = rowNumber,
+                                Column = i,
+                                Value = bingoBoardLineContents[i],
+                                Marked = false
+                            });
+                        }
+  
+                    }
+                    rowNumber++;
+                }
+
+            });
+
+            return bingoBoards;
+        }
+    }
+}
+
+public class BingoBoard
+{
+    public int Id { get; set; }
+    public List<BingoBoardCell> Cells { get; set; } = new List<BingoBoardCell>();
+    public bool HasWin()
+    {
+        for (var i = 0; i < Cells.Max(x => x.Row); i++)
+        {
+            var row = Cells.Where(x => x.Row == i);
+            if (row.All(x => x.Marked == true))
+            {
+                return true;
+            }
+        }
+
+        for (var i = 0; i < Cells.Max(x => x.Column); i++)
+        {
+            var column = Cells.Where(x => x.Column == i);
+            if (column.All(x => x.Marked == true))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    public void MarkCell(string calledNumber)
+    {
+        Cells.ForEach(x =>
+        {
+            if (x.Value == calledNumber)
+            {
+                x.Marked = true;
+            }
+        });
+    }
+}
+
+public class BingoBoardCell
+{
+    public int Row { get; set; }
+    public int Column { get; set; }
+    public string Value { get; set; }
+    public bool Marked { get; set; }
+}
