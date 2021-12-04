@@ -11,7 +11,7 @@ namespace AdventOfCode2021
 
         public (int, int) GetDay4Result() 
         {
-            return (GetWinningBoardSum(),0);
+            return (0, GetLastWinningBoardSum());
         }
 
         public int GetWinningBoardSum()
@@ -22,7 +22,16 @@ namespace AdventOfCode2021
             winningBoard.Cells.Where(x => !x.Marked).ToList().ForEach(x => boardSum += int.Parse(x.Value));
 
             return boardSum * winningNumber;
+        }
 
+        public int GetLastWinningBoardSum()
+        {
+            var (winningNumber, winningBoard) = GetLastWinner();
+
+            var boardSum = 0;
+            winningBoard.Cells.Where(x => !x.Marked).ToList().ForEach(x => boardSum += int.Parse(x.Value));
+
+            return boardSum * winningNumber;
         }
 
         public (int, BingoBoard) GetWinner()
@@ -40,6 +49,30 @@ namespace AdventOfCode2021
                         return (int.Parse(number), board);
                     }
                 }
+            }
+
+            throw new Exception();
+        }
+
+        public (int, BingoBoard) GetLastWinner()
+        {
+            var calledNumbers = GetAllCalledNumbers();
+            var bingoBoards = GetBingoBoards();
+
+            foreach (var number in calledNumbers)
+            {
+                foreach (var board in bingoBoards)
+                {
+                    if (!board.HasWon)
+                    {
+                        board.MarkCell(number);
+                        if (board.HasWin() & bingoBoards.Count(x => !x.HasWon) == 1)
+                        { 
+                           return (int.Parse(number), board);
+                        }
+                    }
+                }
+             
             }
 
             throw new Exception();
@@ -101,6 +134,7 @@ public class BingoBoard
 {
     public int Id { get; set; }
     public List<BingoBoardCell> Cells { get; set; } = new List<BingoBoardCell>();
+    public bool HasWon { get; set; }
     public bool HasWin()
     {
         for (var i = 0; i < Cells.Max(x => x.Row); i++)
@@ -108,6 +142,7 @@ public class BingoBoard
             var row = Cells.Where(x => x.Row == i);
             if (row.All(x => x.Marked == true))
             {
+                HasWon = true;
                 return true;
             }
         }
@@ -117,6 +152,7 @@ public class BingoBoard
             var column = Cells.Where(x => x.Column == i);
             if (column.All(x => x.Marked == true))
             {
+                HasWon = true;
                 return true;
             }
         }
