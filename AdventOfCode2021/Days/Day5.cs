@@ -62,6 +62,7 @@ namespace AdventOfCode2021
             {
                 yield return (x, y);
 
+                x = x == coord.X2 ? coord.X2 : x + dx;
                 y = y == coord.Y2 ? coord.Y2 : y + dy;
             }
         }
