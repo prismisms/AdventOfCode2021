@@ -55,13 +55,14 @@ namespace AdventOfCode2021
             var dx = Math.Sign(coord.X2 - coord.X1);
             var dy = Math.Sign(coord.Y2 - coord.Y1);
             var steps = Math.Max(Math.Abs(coord.X2 - coord.X1), Math.Abs(coord.Y2 - coord.Y1)) + 1;
+            var x = coord.X1;
+            var y = coord.Y1;
 
             for (var i = 1; i <= steps; ++i)
             {
-                yield return (coord.X1, coord.Y1);
+                yield return (x, y);
 
-                coord.X1 = coord.X1 == coord.X2 ? coord.X2 : coord.X1 + dx;
-                coord.Y1 = coord.Y1 == coord.Y2 ? coord.Y2 : coord.Y1 + dy;
+                y = y == coord.Y2 ? coord.Y2 : y + dy;
             }
         }
 
