@@ -19,6 +19,17 @@ namespace AdventOfCode2021
             return values;
         }
 
+        public static IEnumerable<int> GetNumbersFromCommaSeparatedSingleLine(string fileLocation)
+        {
+            var file = GetFileContentsAsStrings(fileLocation);
+            var values = file.First().Split(',');
+
+            foreach (var value in values)
+            {
+                yield return int.Parse(value);
+            }
+        }
+
         public static List<string> GetFileContentsAsStrings(string fileLocation)
         {
             var values = new List<string>();
