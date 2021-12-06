@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2021
 {
-    public class Day1 : DayBase<int>
+    public class Day1 : DayBase<int, int>
     {
         // How many measurements are larger than the previous measurement?
         public Day1(string fileLocation) 

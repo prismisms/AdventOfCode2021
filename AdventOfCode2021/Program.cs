@@ -23,7 +23,7 @@ static void GetSolutions()
     }
 }
 
-static (int, int) GetResultsForDay(int day) => day switch
+static (long, long) GetResultsForDay(int day) => day switch
 {
     1 => new Day1(GetFilePath(day)).GetResult(),
     2 => new Day2(GetFilePath(day)).GetResult(),

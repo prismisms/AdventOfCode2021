@@ -2,10 +2,10 @@
 
 namespace AdventOfCode2021
 {
-    public class Day6 : DayBase<int>
+    public class Day6 : DayBase<int, long>
     {
-        private const int ResetNumber = 6;
-        private const int NewLanternFishNumber = 8;
+        private const int ResetAge = 6;
+        private const int NewLanternFishAge = 8;
         private List<int> _lanternFish;
         private readonly string _fileLocation;
 
@@ -16,7 +16,8 @@ namespace AdventOfCode2021
             _lanternFish = FileContents;
         }
 
-        public override int Part1()
+        // Keeping this just because it was my original solution that absolutely does not work for part 2
+        public override long Part1()
         {
             var numberOfDays = 80;
             while (numberOfDays > 0)
@@ -26,8 +27,8 @@ namespace AdventOfCode2021
                 {
                     if (_lanternFish[i] == 0)
                     {
-                        _lanternFish[i] = 6;
-                        newAdditions.Add(8);
+                        _lanternFish[i] = ResetAge;
+                        newAdditions.Add(NewLanternFishAge);
                     }
                     else
                     {
@@ -42,15 +43,16 @@ namespace AdventOfCode2021
             return _lanternFish.Count;
         }
 
-        public override int Part2()
+        public override long Part2()
         {
             var lanternFishAges = new long[9];
 
-            FileHandler.GetNumbersFromCommaSeparatedSingleLine(_fileLocation).ToList().ForEach(x => lanternFishAges[x]++);
+            FileHandler.GetNumbersFromCommaSeparatedSingleLine(_fileLocation).ToList()
+                .ForEach(x => lanternFishAges[x]++);
 
             for (var i = 0; i < 256; i++)
             {
-                var newFish = (long)0;
+                var newFish = (long) 0;
 
                 for (var lanternFishAge = 0; lanternFishAge < lanternFishAges.Length; lanternFishAge++)
                 {
@@ -68,16 +70,11 @@ namespace AdventOfCode2021
                     }
                 }
 
-                lanternFishAges[8] += newFish;
-                lanternFishAges[6] += newFish;
+                lanternFishAges[NewLanternFishAge] += newFish;
+                lanternFishAges[ResetAge] += newFish;
             }
 
-            Console.WriteLine(lanternFishAges.Sum());
-
-            return 0;
+            return lanternFishAges.Sum();
         }
-
-
-
     }
 }

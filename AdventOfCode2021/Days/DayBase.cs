@@ -1,18 +1,18 @@
 ﻿namespace AdventOfCode2021
 {
-    public abstract class DayBase<T>
+    public abstract class DayBase<TFileType,TOutputType>
     {
-        protected readonly List<T> FileContents;
+        protected readonly List<TFileType> FileContents;
 
-        protected DayBase(List<T> fileContents)
+        protected DayBase(List<TFileType> fileContents)
         {
             FileContents = fileContents;
         }
 
-        public abstract int Part1();
-        public abstract int Part2();
+        public abstract TOutputType Part1();
+        public abstract TOutputType Part2();
 
-        public (int, int) GetResult()
+        public (TOutputType, TOutputType) GetResult()
         {
             return (Part1(), Part2());
         }

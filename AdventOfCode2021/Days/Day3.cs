@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2021
 {
-    public class Day3 : DayBase<string>
+    public class Day3 : DayBase<string, int>
     {
         public Day3(string fileLocation) : base(FileHandler.GetFileContentsAsStrings(fileLocation))
         {

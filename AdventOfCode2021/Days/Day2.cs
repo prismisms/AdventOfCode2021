@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2021
 {
-    public class Day2 : DayBase<string>
+    public class Day2 : DayBase<string, int>
     {
         private readonly List<(string, int)> _formattedFileContents;
 

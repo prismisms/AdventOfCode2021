@@ -1,6 +1,6 @@
 namespace AdventOfCode2021
 {
-    public class Day4 : DayBase<string>
+    public class Day4 : DayBase<string, int>
     {
         private readonly List<string> _calledNumbers;
         private readonly List<BingoBoard> _bingoBoards;

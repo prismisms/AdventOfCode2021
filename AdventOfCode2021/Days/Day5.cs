@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2021
 {
-    public class Day5 : DayBase<string>
+    public class Day5 : DayBase<string, int>
     {
         private readonly List<Coordinates> _coordinates = new();
         private readonly Dictionary<(int, int), int> _pointsOnMap = new();
