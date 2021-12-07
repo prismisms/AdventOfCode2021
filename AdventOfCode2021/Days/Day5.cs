@@ -50,7 +50,7 @@ namespace AdventOfCode2021
             }
         }
 
-        public static IEnumerable<(int, int)> AllCoordinatesBetween(Coordinates coord)
+        private static IEnumerable<(int, int)> AllCoordinatesBetween(Coordinates coord)
         {
             var dx = Math.Sign(coord.X2 - coord.X1);
             var dy = Math.Sign(coord.Y2 - coord.Y1);
