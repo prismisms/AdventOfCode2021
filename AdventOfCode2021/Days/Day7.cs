@@ -9,6 +9,16 @@ namespace AdventOfCode2021
 
         public override int Part1()
         {
+            return GetFuelToMoveAllCrabsToPosition(true);
+        }
+
+        public override int Part2()
+        {
+            return GetFuelToMoveAllCrabsToPosition(false);
+        }
+
+        private int GetFuelToMoveAllCrabsToPosition(bool linear)
+        {
             var maxHorizontalPosition = FileContents.Max();
             var minHorizontalPosition = FileContents.Min();
             var previousFuelToPosition = 0;
@@ -16,10 +26,11 @@ namespace AdventOfCode2021
 
             for (var i = minHorizontalPosition; i <= maxHorizontalPosition; i++)
             {
-                
+
                 FileContents.ForEach(initialPosition =>
                 {
-                    fuelToPosition += Math.Abs(initialPosition - i);
+                    var linearFuel = Math.Abs(initialPosition - i);
+                    fuelToPosition += linear ? linearFuel : GetNonLinearFuel(linearFuel);
                 });
 
                 if (fuelToPosition < previousFuelToPosition || previousFuelToPosition == 0)
@@ -27,39 +38,14 @@ namespace AdventOfCode2021
                     previousFuelToPosition = fuelToPosition;
                 }
 
-                    fuelToPosition = 0;
+                fuelToPosition = 0;
 
             }
 
             return previousFuelToPosition;
         }
 
-        public override int Part2()
-        {
-            var maxHorizontalPosition = FileContents.Max();
-            var minHorizontalPosition = FileContents.Min();
-            var previousNonLinearFuelToPosition = 0;
-            var nonLinearFuelToPosition = 0;
-
-            for (var i = minHorizontalPosition; i <= maxHorizontalPosition; i++)
-            {
-                FileContents.ForEach(initialPosition =>
-                {
-                    nonLinearFuelToPosition += GetChange(Math.Abs(initialPosition - i));
-                });
-
-                if (nonLinearFuelToPosition < previousNonLinearFuelToPosition || previousNonLinearFuelToPosition == 0)
-                {
-                    previousNonLinearFuelToPosition = nonLinearFuelToPosition;
-                }
-
-                nonLinearFuelToPosition = 0;
-            }
-            
-            return previousNonLinearFuelToPosition;
-        }
-
-        private static int GetChange(int change)
+        private static int GetNonLinearFuel(int change)
         {
             var result = 0;
             for (var i = 0; i <= change; i++)
