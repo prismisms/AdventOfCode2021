@@ -43,10 +43,9 @@ namespace AdventOfCode2021
 
             for (var i = minHorizontalPosition; i <= maxHorizontalPosition; i++)
             {
-
                 FileContents.ForEach(initialPosition =>
                 {
-                    nonLinearFuelToPosition += GetChange(initialPosition, i);
+                    nonLinearFuelToPosition += GetChange(Math.Abs(initialPosition - i));
                 });
 
                 if (nonLinearFuelToPosition < previousNonLinearFuelToPosition || previousNonLinearFuelToPosition == 0)
@@ -55,29 +54,17 @@ namespace AdventOfCode2021
                 }
 
                 nonLinearFuelToPosition = 0;
-
             }
-
+            
             return previousNonLinearFuelToPosition;
         }
 
-        private int GetChange(int startPosition, int endPosition)
+        private static int GetChange(int change)
         {
-            var positionMax = endPosition;
-            var positionMin = startPosition;
-
-            if (startPosition > endPosition)
-            {
-                positionMax = startPosition;
-                positionMin = endPosition;
-            }
-
             var result = 0;
-            var step = 0;
-            for (var i = positionMin; i < positionMax; i++)
+            for (var i = 0; i <= change; i++)
             {
-                step++;
-                result += step;
+                result += i;
             }
 
             return result;
