@@ -32,6 +32,7 @@ static (long, long) GetResultsForDay(int day) => day switch
     5 => new Day5(GetFilePath(day)).GetResult(),
     6 => new Day6(GetFilePath(day)).GetResult(),
     7 => new Day7(GetFilePath(day)).GetResult(),
+    8 => new Day8(GetFilePath(day)).GetResult(),
     _ => throw new ArgumentOutOfRangeException($"Day {day} is either out of scope or not yet implemented")
 };
 
