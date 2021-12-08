@@ -59,9 +59,9 @@ namespace AdventOfCode2021
                 // Start with 6, as it's the easiest to find from what we already know
                 _segments[6] = signalPatterns.First(x => x.Length == 6 && x.Intersect(_segments[1]).Count() == 1);
 
-                // Leftover  from the intersection must be top right
+                // Leftover  from the intersection must be bottom right
                 var bottomRightCharacter = _segments[1].Intersect(_segments[6]).First();
-                // And the other one left from the segment numbered 1 is bottom right
+                // And the other one left from the segment numbered 1 is top right
                 var topRightCharacter = _segments[1].First(x => x != bottomRightCharacter);
 
                 _segments[2] = signalPatterns.First(x => x.Length == 5 && x.Contains(topRightCharacter) && !x.Contains(bottomRightCharacter));
