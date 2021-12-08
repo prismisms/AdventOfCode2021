@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace AdventOfCode2021
 {
@@ -65,6 +68,17 @@ namespace AdventOfCode2021
             }
 
             return values;
+        }
+
+        public static IEnumerable<string> GetFileContentsWithDelimiter(string fileLocation, char delimiter)
+        {
+            var file = GetFileContentsAsStrings(fileLocation);
+            var values = file.First().Split(delimiter);
+
+            foreach (var value in values)
+            {
+                yield return value;
+            }
         }
     }
 }
