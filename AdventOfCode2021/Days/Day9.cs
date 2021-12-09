@@ -7,10 +7,10 @@ namespace AdventOfCode2021
 
         public Day9(string fileLocation) : base(FileHandler.GetFileContentsAsStrings(fileLocation))
         {
-            for (var i = 0; i < FileContents.Count(); i++)
+            for (var i = 0; i < FileContents.Count; i++)
             {
                 var ints = FileContents[i].Select(x => int.Parse(x.ToString())).ToList();
-                for (var j = 0; j < ints.Count(); j++)
+                for (var j = 0; j < ints.Count; j++)
                 {
                     var mapValue = ints[j];
                     _map.Add(new MapPoint
@@ -33,9 +33,9 @@ namespace AdventOfCode2021
         public override int Part2()
         {
             var lowPoints = GetLowPoints(_map);
-            var basins = GetBasins(lowPoints).ToList().OrderByDescending(list => list.Count()).ToList();
+            var basins = GetBasins(lowPoints).ToList().OrderByDescending(list => list.Count).ToList();
 
-            return basins[0].Count() * basins[1].Count() * basins[2].Count();
+            return basins[0].Count * basins[1].Count * basins[2].Count;
         }
 
         private IEnumerable<List<MapPoint>> GetBasins(List<MapPoint> lowPoints)
@@ -49,7 +49,7 @@ namespace AdventOfCode2021
                 // Initial
                 var adjacentPoints = GetAdjacentPoints(value);
                 
-                while (adjacentPoints.Count() > 0 && adjacentPoints.Any(x => x.Value > lowPoint))
+                while (adjacentPoints.Any() && adjacentPoints.Any(x => x.Value > lowPoint))
                 {
                     var newMapPoints = new List<MapPoint>();
                     
@@ -57,14 +57,14 @@ namespace AdventOfCode2021
                     {
                         if (point.Value != 9 && point.Value == lowPoint + 1
                             && !basin.Any(x => x.XLocation == point.XLocation && x.YLocation == point.YLocation)
-                            && !basins.Any(basin => basin.Any(x => x.XLocation == point.XLocation && x.YLocation == point.YLocation)))
+                            && !basins.Any(z => z.Any(x => x.XLocation == point.XLocation && x.YLocation == point.YLocation)))
                         {
                             newMapPoints.Add(point);
                             basin.Add(point);
                         }
                     });
 
-                    adjacentPoints = newMapPoints.SelectMany(x => GetAdjacentPoints(x)).ToList();
+                    adjacentPoints = newMapPoints.SelectMany(GetAdjacentPoints).ToList();
                     lowPoint++;
                 }
 
@@ -93,12 +93,13 @@ namespace AdventOfCode2021
             // Locations lower than any adjacent locations
             map.ForEach(mapPoint =>
             {
-                var adjacentPoints = new List<MapPoint>();
-                
-                adjacentPoints.Add(map.FirstOrDefault(x => x.XLocation == mapPoint.XLocation && x.YLocation == mapPoint.YLocation - 1));
-                adjacentPoints.Add(map.FirstOrDefault(x => x.XLocation == mapPoint.XLocation && x.YLocation == mapPoint.YLocation + 1));
-                adjacentPoints.Add(map.FirstOrDefault(x => x.XLocation == mapPoint.XLocation - 1 && x.YLocation == mapPoint.YLocation));
-                adjacentPoints.Add(map.FirstOrDefault(x => x.XLocation == mapPoint.XLocation + 1 && x.YLocation == mapPoint.YLocation));
+                var adjacentPoints = new List<MapPoint>
+                {
+                    map.FirstOrDefault(x => x.XLocation == mapPoint.XLocation && x.YLocation == mapPoint.YLocation - 1),
+                    map.FirstOrDefault(x => x.XLocation == mapPoint.XLocation && x.YLocation == mapPoint.YLocation + 1),
+                    map.FirstOrDefault(x => x.XLocation == mapPoint.XLocation - 1 && x.YLocation == mapPoint.YLocation),
+                    map.FirstOrDefault(x => x.XLocation == mapPoint.XLocation + 1 && x.YLocation == mapPoint.YLocation)
+                };
 
                 if (adjacentPoints.Where(x => x != null).All(x => x != null && mapPoint.Value < x?.Value))
                 {
