@@ -46,7 +46,6 @@ namespace AdventOfCode2021
                 var lowPoint = value.Value;
                 var basin = new List<MapPoint> { value };
 
-                // Initial
                 var adjacentPoints = GetAdjacentPoints(value);
                 
                 while (adjacentPoints.Any() && adjacentPoints.Any(x => x.Value > lowPoint))
@@ -55,7 +54,7 @@ namespace AdventOfCode2021
                     
                     adjacentPoints.ForEach(point =>
                     {
-                        if (point.Value != 9 && point.Value == lowPoint + 1
+                        if (point.Value != 9 && point.Value > lowPoint
                             && !basin.Any(x => x.XLocation == point.XLocation && x.YLocation == point.YLocation)
                             && !basins.Any(z => z.Any(x => x.XLocation == point.XLocation && x.YLocation == point.YLocation)))
                         {
