@@ -9,7 +9,7 @@ namespace AdventOfCode2021
         private readonly string _leftBrackets = "{[(<";
         private readonly string _rightBrackets = "}])>";
 
-        private readonly List<string> bracketPairs = new List<string>
+        private readonly List<string> _bracketPairs = new List<string>
         {
             "[]",
             "()",
@@ -64,7 +64,7 @@ namespace AdventOfCode2021
 
             }).ToList().OrderByDescending(x => x).ToList();
 
-            return incompleteLineScores[(incompleteLineScores.Count - 1) / 2]);
+            return incompleteLineScores[(incompleteLineScores.Count - 1) / 2];
         }
 
         private List<string> GetIncompleteLines()
@@ -85,12 +85,12 @@ namespace AdventOfCode2021
 
         private string RemoveChunks(string line)
         {
-            bracketPairs.ForEach(pair =>
+            _bracketPairs.ForEach(pair =>
             {
                 line = line.Replace(pair, "");
             });
 
-            if (bracketPairs.Any(pair => line.Contains(pair)))
+            if (_bracketPairs.Any(pair => line.Contains(pair)))
             {
                 line = RemoveChunks(line);
             }
@@ -100,7 +100,7 @@ namespace AdventOfCode2021
 
         private static string Reverse(string s)
         {
-            char[] charArray = s.ToCharArray();
+            var charArray = s.ToCharArray();
             Array.Reverse(charArray);
             return new string(charArray);
         }
