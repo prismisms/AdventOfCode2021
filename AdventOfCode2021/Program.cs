@@ -1,8 +1,8 @@
 ﻿using AdventOfCode2021;
 
-GetSolutions();
+Solutions();
 
-static void GetSolutions()
+static void Solutions()
 {
     while (true)
     {
@@ -11,7 +11,7 @@ static void GetSolutions()
 
         if (int.TryParse(dayInput, out var day))
         {
-            var (part1, part2) = GetResultsForDay(day);
+            var (part1, part2) = ResultsForDay(day);
             Console.WriteLine(@$"Day {day} Part 1: {part1}");
             Console.WriteLine(@$"Day {day} Part 2: {part2}");
         }
@@ -23,7 +23,7 @@ static void GetSolutions()
     }
 }
 
-static (long, long) GetResultsForDay(int day) => day switch
+static (long, long) ResultsForDay(int day) => day switch
 {
     1 => new Day1(GetFilePath(day)).GetResult(),
     2 => new Day2(GetFilePath(day)).GetResult(),
@@ -36,6 +36,8 @@ static (long, long) GetResultsForDay(int day) => day switch
     9 => new Day9(GetFilePath(day)).GetResult(),
     10 => new Day10(GetFilePath(day)).GetResult(),
     11 => new Day11(GetFilePath(day)).GetResult(),
+    12 => new Day12(GetFilePath(day)).GetResult(),
+    13 => new Day13(GetFilePath(day)).GetResult(),
     _ => throw new ArgumentOutOfRangeException($"Day {day} is either out of scope or not yet implemented")
 };
 
